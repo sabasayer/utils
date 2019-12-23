@@ -1,0 +1,28 @@
+{
+  "name": "@sabasayer/utils",
+  "version": "1.0.0",
+  "description": "Utilities for js apps",
+  "main": "dist/index.js",
+  "types": "dist/",
+  "scripts": {
+    "test": "jest",
+    "build": "tsc"
+  },
+  "dependencies": {
+    "lodash.clonedeep": "^4.5.0"
+  },
+  "peerDependencies": {
+    "lodash.clonedeep": "^4.5.0"
+  },
+  "keywords": [
+    "typescript"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/lodash.clonedeep": "4.5.3",
+    "@types/jest": "^24.0.24",
+    "jest": "^24.9.0",
+    "ts-jest": "^24.2.0"
+  }
+}
