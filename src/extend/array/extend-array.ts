@@ -15,7 +15,7 @@ declare global {
         ): Promise<void>;
         toGroupModel(groupBy: (item: T) => any): GroupModel<T>;
         toGroupModelValues(groupBy: (item: T) => any): T[][];
-        sum(key: keyof T & string): number;
+        sum(statement: (item: T) => number): number;
         toGroupItems<ChildType = T>(
             groupBy: (item: T) => any,
             itemChildProp?: (item: T) => any,
@@ -183,10 +183,10 @@ export class ExtendArray {
         if (!!Array.prototype.sum) return;
 
         Object.defineProperty(Array.prototype, "sum", {
-            value: function<T>(key: keyof T & string) {
+            value: function<T>(statement: (item: T) => number) {
                 let total = 0;
                 for (let i = 0, _len = this.length; i < _len; i++) {
-                    total += this[i][key];
+                    total += statement(this[i]);
                 }
                 return total;
             },
@@ -199,7 +199,7 @@ export class ExtendArray {
 
         Object.defineProperty(Array.prototype, "distinct", {
             value: function<T>() {
-                return this.filter((e: T, index: number, arr: Array<T>) => {
+                return (this as Array<T>).filter((e: T, index: number, arr: Array<T>) => {
                     return arr.indexOf(e) === index;
                 });
             },
