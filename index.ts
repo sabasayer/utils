@@ -1,4 +1,4 @@
-import "./src/extend";
+import {ExtendArray} from "./src/extend";
 
 import { PositionCalculaterUtil } from "./src/position-calculate/position-calculate.util";
 import { DataTrackerUtil } from "./src/data-tracker/data-tracker.util";
@@ -53,5 +53,6 @@ export {
   mapTo,
   mapToArray,
   SortUtil,
-  UuidUtil
+  UuidUtil,
+  ExtendArray
 };
