@@ -1,6 +1,6 @@
 import { PositionCalculaterUtil } from "../..";
 
-export abstract class DomUtils {
+export abstract class DomUtil {
 
     static isKeyAvailableOnNumberInput(
         evt: KeyboardEvent,

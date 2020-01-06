@@ -1,4 +1,4 @@
-export abstract class BrowserStorageFactory {
+export abstract class BrowserStorageUtil {
     protected static storage = window.sessionStorage;
     private static inMemoryStorage: { [key: string]: string } = {};
 
@@ -58,10 +58,10 @@ export abstract class BrowserStorageFactory {
     }
 }
 
-export abstract class SessionStorageFactory extends BrowserStorageFactory {
+export abstract class SessionStorageUtil extends BrowserStorageUtil {
     protected static storage = window.sessionStorage;
 }
 
-export abstract class LocalStorageFactory extends BrowserStorageFactory {
+export abstract class LocalStorageUtil extends BrowserStorageUtil {
     protected static storage = window.localStorage;
 }
