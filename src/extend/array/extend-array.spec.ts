@@ -56,7 +56,24 @@ describe("extended array functions", () => {
     expect(items).toEqual([1, 2, 3, 4]);
   });
 
-  test("forEachAsync", async () => {});
+  test("forEachAsync", async () => {
+	  
+	let items:number[] = [1,2];
+
+	let otherItems:number[] = [6,7];
+
+	const addItemFunction = async (e:number)=>{return new Promise(resolve => setTimeout(()=>{
+		items.push(e);
+		resolve();
+	}, 300))}
+
+	await otherItems.forEachAsync(async e=>{
+		await addItemFunction(e);
+	});
+
+	expect(items).toEqual([1,2,6,7]);
+
+  });
 
   test("toGroupModel", () => {
     let items: { value: string; id: number }[] = [

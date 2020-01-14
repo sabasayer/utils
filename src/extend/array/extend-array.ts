@@ -183,7 +183,7 @@ export class ExtendArray {
         if (!!Array.prototype.sum) return;
 
         Object.defineProperty(Array.prototype, "sum", {
-            value: function<T>(statement: (item: T) => number) {
+            value: function<T>(this:T[],statement: (item: T) => number) {
                 let total = 0;
                 for (let i = 0, _len = this.length; i < _len; i++) {
                     total += statement(this[i]);
