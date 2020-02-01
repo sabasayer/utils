@@ -1,4 +1,4 @@
-import { DataGroupUtils } from "../../data-group/data-group.util";
+import { DataGroupUtil } from "../../data-group/data-group.util";
 import { GroupItem, GroupModel } from "../../data-group/data-group.interface";
 
 declare global {
@@ -141,7 +141,7 @@ export class ExtendArray {
 
         Object.defineProperty(Array.prototype, "toGroupModel", {
             value: function<T>(this: T[], groupBy: (item: T) => any) {
-                return DataGroupUtils.toGroupModel(this, groupBy);
+                return DataGroupUtil.toGroupModel(this, groupBy);
             },
             enumerable: false,
             configurable: true
@@ -157,7 +157,7 @@ export class ExtendArray {
                 itemChildProp?: (item: T) => any,
                 childGroupBy?: (item: ChildType) => any
             ) {
-                return DataGroupUtils.toGroupItems(
+                return DataGroupUtil.toGroupItems(
                     this,
                     groupBy,
                     itemChildProp,

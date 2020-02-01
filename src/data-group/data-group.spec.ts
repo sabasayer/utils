@@ -1,5 +1,5 @@
 import { GroupModel, GroupItem } from "./data-group.interface";
-import { DataGroupUtils } from "./data-group.util";
+import { DataGroupUtil } from "./data-group.util";
 
 describe("DataGroupUtil",()=>{
     test("toGroupModel", () => {
@@ -9,7 +9,7 @@ describe("DataGroupUtil",()=>{
           { value: "first", id: 3 }
         ];
     
-        let group = DataGroupUtils.toGroupModel(items,e => e.value);
+        let group = DataGroupUtil.toGroupModel(items,e => e.value);
     
         let expectGroup: GroupModel<{ value: string; id: number }> = {
           first: [
@@ -29,7 +29,7 @@ describe("DataGroupUtil",()=>{
           { value: "first", id: 3 }
         ];
     
-        let groupItems = DataGroupUtils.toGroupItems(items,e => e.value);
+        let groupItems = DataGroupUtil.toGroupItems(items,e => e.value);
     
         let expectGroupItems: GroupItem<{ value: string; id: number }>[] = [
           {

@@ -19,7 +19,7 @@ import {
   cacheToSessionStorage
 } from "./src/cache/cache.decorator";
 
-import { DataGroupUtils } from "./src/data-group/data-group.util";
+import { DataGroupUtil } from "./src/data-group/data-group.util";
 import { GroupItem, GroupModel } from "./src/data-group/data-group.interface";
 import { DateUtil } from "./src/date/date.util";
 import { DecimalUtil } from "./src/decimal/decimal.util";
@@ -46,7 +46,7 @@ export {
   cacheToLocalStorage,
   cacheToMemory,
   cacheToSessionStorage,
-  DataGroupUtils,
+  DataGroupUtil as DataGroupUtils,
   GroupItem,
   GroupModel,
   DateUtil,

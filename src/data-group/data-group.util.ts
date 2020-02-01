@@ -1,6 +1,6 @@
 import { GroupItem, GroupModel } from "./data-group.interface";
 
-export abstract class DataGroupUtils {
+export abstract class DataGroupUtil {
     static toGroupModel<T>(
         items: T[],
         groupBy: (item: T) => any

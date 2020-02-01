@@ -2,34 +2,6 @@ import { PositionCalculaterUtil } from "../..";
 
 export abstract class DomUtil {
 
-    static isKeyAvailableOnNumberInput(
-        evt: KeyboardEvent,
-        isOnlyInteger: boolean,
-        enableNegative?: boolean
-    ) {
-        let value = (evt.target as HTMLInputElement).value;
-        let charCode = evt.which ? evt.which : evt.keyCode;
-        const dotKeyCode = 46;
-        const minusKeyCode = 45;
-
-        let cursorIndex = (evt.target as HTMLInputElement).selectionStart;
-
-        if (enableNegative && charCode == minusKeyCode) {
-            let intValue = parseFloat(value);
-            if (intValue != 0 && value.indexOf("-") == -1 && cursorIndex == 0)
-                return true;
-            else evt.preventDefault();
-        } else if (!isOnlyInteger && charCode == dotKeyCode) {
-            //if there is no '.' already , '.' can be used
-            if (value.indexOf(".") == -1) return true;
-            else evt.preventDefault();
-        } else if (charCode > 31 && (charCode < 48 || charCode > 57)) {
-            evt.preventDefault();
-        } else {
-            return true;
-        }
-    }
-
     static findParentElement(
         el: HTMLElement,
         classValue?: string,
