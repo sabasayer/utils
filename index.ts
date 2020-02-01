@@ -29,6 +29,9 @@ import { mapTo, mapToArray } from "./src/map/map.decorator";
 import { SortUtil } from "./src/sort/sort.util";
 import { UuidUtil } from "./src/uuid/uuid.util";
 
+import {InputUtil} from './src/input/input.util'
+import {EnumKeyboardKey} from './src/input/keyboard-key.enum'
+
 export {
   PositionCalculaterUtil,
   DataTrackerUtil,
@@ -54,5 +57,7 @@ export {
   mapToArray,
   SortUtil,
   UuidUtil,
-  ExtendArray
+  ExtendArray,
+  EnumKeyboardKey,
+  InputUtil
 };
