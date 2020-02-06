@@ -1,4 +1,4 @@
-import cloneDeep from "lodash/clonedeep";
+import cloneDeep from "lodash.clonedeep";
 import { DateUtil } from "../date/date.util";
 import { BrowserLanguageUtil } from "../browser-language/browser-language.util";
 

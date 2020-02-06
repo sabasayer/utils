@@ -46,7 +46,7 @@ export {
   cacheToLocalStorage,
   cacheToMemory,
   cacheToSessionStorage,
-  DataGroupUtil as DataGroupUtils,
+  DataGroupUtil,
   GroupItem,
   GroupModel,
   DateUtil,
