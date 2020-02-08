@@ -19,7 +19,7 @@ export interface ElementDimensions {
 }
 
 export abstract class PositionCalculaterUtil {
-    static outPositionTolerance:number = 20;
+    static outPositionTolerance: number = 20;
     static offset(el: HTMLElement) {
         let rect = el.getBoundingClientRect(),
             scrollLeft =
@@ -53,22 +53,36 @@ export abstract class PositionCalculaterUtil {
 
         if (dimension.left - this.outPositionTolerance < window.pageXOffset) {
             outPositions.left =
-                window.pageXOffset - (dimension.left - this.outPositionTolerance);
+                window.pageXOffset -
+                (dimension.left - this.outPositionTolerance);
         }
 
-        if (dimension.left + dimension.width + this.outPositionTolerance > windowWidth) {
+        if (
+            dimension.left + dimension.width + this.outPositionTolerance >
+            windowWidth
+        ) {
             outPositions.right =
-                dimension.left + dimension.width + this.outPositionTolerance - windowWidth;
+                dimension.left +
+                dimension.width +
+                this.outPositionTolerance -
+                windowWidth;
         }
 
         if (dimension.top - this.outPositionTolerance < window.pageYOffset) {
             outPositions.top =
-                window.pageYOffset - (dimension.top - this.outPositionTolerance);
+                window.pageYOffset -
+                (dimension.top - this.outPositionTolerance);
         }
 
-        if (dimension.top + dimension.height + this.outPositionTolerance > windowHeight) {
+        if (
+            dimension.top + dimension.height + this.outPositionTolerance >
+            windowHeight
+        ) {
             outPositions.bottom =
-                dimension.top + dimension.height + this.outPositionTolerance - windowHeight;
+                dimension.top +
+                dimension.height +
+                this.outPositionTolerance -
+                windowHeight;
         }
 
         return outPositions;
@@ -77,17 +91,35 @@ export abstract class PositionCalculaterUtil {
     /**
      * calculates left value of align element relative to targer for centering
      * */
-    static horizontalCenter(target:ElementDimensions,align:ElementDimensions):void
-    {
+    static horizontalCenter(
+        target: ElementDimensions,
+        align: ElementDimensions
+    ): void {
         align.left = target.left - (align.width - target.width) / 2;
     }
 
     /**
      * calculates top value of align element relative to targer for centering
      * */
-    static verticalCenter(target:ElementDimensions,align:ElementDimensions):void
-    {
+    static verticalCenter(
+        target: ElementDimensions,
+        align: ElementDimensions
+    ): void {
         align.top = target.top - (align.height - target.height) / 2;
+    }
+
+    static shiftToFitScreen(
+        dimensions: ElementDimensions,
+        outPos: OutPositions
+    ) {
+        if (outPos.top)
+            dimensions.top += outPos.top + this.outPositionTolerance;
+        if (outPos.bottom)
+            dimensions.top -= outPos.bottom + this.outPositionTolerance;
+        if (outPos.right)
+            dimensions.left -= outPos.right + this.outPositionTolerance;
+        if (outPos.left)
+            dimensions.left += outPos.left + this.outPositionTolerance;
     }
 
     static snapToBottom(
@@ -96,51 +128,79 @@ export abstract class PositionCalculaterUtil {
         enableMirror: boolean
     ) {
         snap.top = snapTo.top + snapTo.height;
-        this.horizontalCenter(snapTo,snap);
+        this.horizontalCenter(snapTo, snap);
 
         let outPos = this.isDimensionOutOfScreen(snap);
-        if (outPos.left) snap.left += outPos.left+this.outPositionTolerance;
-        if (outPos.right) snap.left -= outPos.right+this.outPositionTolerance;
+        if (outPos.left) snap.left += outPos.left + this.outPositionTolerance;
+        if (outPos.right) snap.left -= outPos.right + this.outPositionTolerance;
 
-        if (outPos.bottom && enableMirror) this.snapToTop(snapTo, snap, false);
+        if (outPos.bottom && enableMirror) {
+            let snapResult = this.snapToTop(snapTo, snap, false);
+            if (snapResult.top) this.shiftToFitScreen(snap, snapResult);
+        }
+
+        return outPos;
     }
 
-    static snapToTop( snapTo: ElementDimensions,
-                      snap: ElementDimensions,
-                      enableMirror: boolean) {
+    static snapToTop(
+        snapTo: ElementDimensions,
+        snap: ElementDimensions,
+        enableMirror: boolean
+    ) {
         snap.top = snapTo.top - snap.height;
-        this.horizontalCenter(snapTo,snap);
+        this.horizontalCenter(snapTo, snap);
 
         let outPos = this.isDimensionOutOfScreen(snap);
-        if (outPos.left) snap.left += outPos.left+this.outPositionTolerance;
-        if (outPos.right) snap.left -= outPos.right+this.outPositionTolerance;
+        if (outPos.left) snap.left += outPos.left + this.outPositionTolerance;
+        if (outPos.right) snap.left -= outPos.right + this.outPositionTolerance;
 
-        if (outPos.top && enableMirror) this.snapToBottom(snapTo, snap, false);
+        if (outPos.top && enableMirror) {
+            let snapResult = this.snapToBottom(snapTo, snap, false);
+            if (snapResult.bottom) this.shiftToFitScreen(snap, snapResult);
+        }
+
+        return outPos;
     }
 
-    static snapToLeft( snapTo: ElementDimensions,
-                       snap: ElementDimensions,
-                       enableMirror: boolean) {
-        this.verticalCenter(snapTo,snap);
+    static snapToLeft(
+        snapTo: ElementDimensions,
+        snap: ElementDimensions,
+        enableMirror: boolean
+    ) {
+        this.verticalCenter(snapTo, snap);
         snap.left = snapTo.left - snap.width;
 
         let outPos = this.isDimensionOutOfScreen(snap);
-        if(outPos.top) snap.top += outPos.top+this.outPositionTolerance;
-        if(outPos.bottom) snap.top -= outPos.bottom+this.outPositionTolerance;
+        if (outPos.top) snap.top += outPos.top + this.outPositionTolerance;
+        if (outPos.bottom)
+            snap.top -= outPos.bottom + this.outPositionTolerance;
 
-        if(outPos.left && enableMirror) this.snapToRight(snapTo,snap,false)
+        if (outPos.left && enableMirror) {
+            let snapResult = this.snapToRight(snapTo, snap, false);
+            if (snapResult.right) this.shiftToFitScreen(snap, snapResult);
+        }
+
+        return outPos;
     }
 
-    static snapToRight( snapTo: ElementDimensions,
-                        snap: ElementDimensions,
-                        enableMirror: boolean) {
-        this.verticalCenter(snapTo,snap);
+    static snapToRight(
+        snapTo: ElementDimensions,
+        snap: ElementDimensions,
+        enableMirror: boolean
+    ) {
+        this.verticalCenter(snapTo, snap);
         snap.left = snapTo.left + snapTo.width;
 
         let outPos = this.isDimensionOutOfScreen(snap);
-        if(outPos.top) snap.top += outPos.top+this.outPositionTolerance;
-        if(outPos.bottom) snap.top -= outPos.bottom+this.outPositionTolerance;
+        if (outPos.top) snap.top += outPos.top + this.outPositionTolerance;
+        if (outPos.bottom)
+            snap.top -= outPos.bottom + this.outPositionTolerance;
 
-        if(outPos.right && enableMirror) this.snapToLeft(snapTo,snap,false)
+        if (outPos.right && enableMirror) {
+            let snapResult = this.snapToLeft(snapTo, snap, false);
+            if (snapResult.left) this.shiftToFitScreen(snap, snapResult);
+        }
+
+        return outPos;
     }
 }

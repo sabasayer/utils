@@ -1,6 +1,6 @@
 {
   "name": "@sabasayer/utils",
-  "version": "1.0.7",
+  "version": "1.0.9",
   "description": "Utilities for ts apps",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
