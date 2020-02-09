@@ -1,20 +1,21 @@
-import cloneDeep from 'lodash.clonedeep';
+import cloneDeep from "lodash.clonedeep";
+import { UuidUtil } from "../uuid/uuid.util";
 
 export abstract class DataTrackerUtil {
     static dataStore: {
-        [key: number]: any;
+        [key: string]: any;
     } = {};
 
-    static registerData(uid:number,data:any)
-    {
-        this.dataStore[uid] = cloneDeep(data);
+    static registerData(data: any, id?: string) {
+        let uuid = id ?? UuidUtil.uuidv4();
+        this.dataStore[uuid] = cloneDeep(data);
+        return uuid;
     }
 
-    static isDataChanged(uid:number,data:any){
+    static isDataChanged(uid: string, data: any) {
         let oldData = this.dataStore[uid];
 
-        if(!oldData)
-            throw "bu veri kayıt edilmemiş";
+        if (!oldData) throw "this data is not registered";
 
         return JSON.stringify(oldData) != JSON.stringify(cloneDeep(data));
     }
