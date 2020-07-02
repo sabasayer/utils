@@ -12,6 +12,8 @@ export abstract class CacheUtil {
 
   private static getFromMemory = (key: string) => CacheUtil.data[key];
 
+  private static clearMemory = (key: string) => delete CacheUtil.data[key];
+
   private static addToLocalStorage = (key: string, data: any) =>
     LocalStorageUtil.setItem(key, JSON.stringify(data));
 
@@ -21,6 +23,10 @@ export abstract class CacheUtil {
     return null;
   };
 
+  private static clearLocalStorage = (key: string) => {
+    LocalStorageUtil.removeItem(key)
+  }
+
   private static addToSessionStorage = (key: string, data: any) =>
     SessionStorageUtil.setItem(key, JSON.stringify(data));
 
@@ -29,6 +35,10 @@ export abstract class CacheUtil {
     if (data) return JSON.parse(data);
     return null;
   };
+
+  private static clearSessionStorage = (key: string) => {
+    SessionStorageUtil.removeItem(key)
+  }
 
   static addToCache(type: EnumCacheType, key: string, data: any) {
     if (data == undefined) return;
@@ -62,15 +72,29 @@ export abstract class CacheUtil {
     }
   }
 
+  static clearCache(type: EnumCacheType, key: string) {
+    switch (type) {
+      case EnumCacheType.Memory:
+        return CacheUtil.clearMemory(key);
+      case EnumCacheType.SessionStorage:
+        return CacheUtil.clearSessionStorage(key);
+      case EnumCacheType.LocalStorage:
+        return CacheUtil.clearLocalStorage(key);
+      case EnumCacheType.IndexedDB:
+        //TODO: indexedDb get
+        break;
+    }
+  }
+
   static cache(type: EnumCacheType): MethodDecorator {
-    return function(
+    return function (
       target: any,
       propertyKey: string | symbol,
       descriptor: PropertyDescriptor
     ) {
       const originalMethod = descriptor.value;
 
-      descriptor.value = async function(...args: any[]) {
+      descriptor.value = async function (...args: any[]) {
         let key = args.reduce((key: string, item: any) => {
           key += "_" + JSON.stringify(item);
           return key;
