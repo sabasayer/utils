@@ -1,6 +1,6 @@
 export enum EnumCacheType{
-    Memory,
-    SessionStorage,
-    LocalStorage,
-    IndexedDB
+    Memory = 1,
+    SessionStorage = 2,
+    LocalStorage = 3,
+    IndexedDB = 4
 }
