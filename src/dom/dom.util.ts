@@ -47,7 +47,7 @@ export abstract class DomUtil {
             let scrollTop = element.scrollTop;
             let offsetHeight = element.offsetHeight;
             let scrollHeight = element.scrollHeight;
-            if (offsetHeight + scrollTop == scrollHeight) {
+            if (offsetHeight + scrollTop >= scrollHeight) {
                 callback();
             }
         });
