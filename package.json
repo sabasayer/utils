@@ -1,12 +1,13 @@
 {
   "name": "@sabasayer/utils",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "Utilities for ts apps",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc",
-    "test": "jest"
+    "build": "node pre-build.js && tsc",
+    "test": "jest",
+    "npm-publish":"npm publish --access public"
   },
   "dependencies": {
     "lodash.clonedeep": "^4.5.0"

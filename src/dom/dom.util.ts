@@ -41,16 +41,39 @@ export abstract class DomUtil {
     return { x, y };
   }
 
-  static handleInfineteScroll(element: HTMLElement, callback: Function) {
+  static checkIsAtTheBottom(options: {
+    offsetHeight: number;
+    scrollTop: number;
+    margin: number;
+    scrollHeight: number;
+  }) {
+    return (
+      options.offsetHeight + options.scrollTop + options.margin >=
+      options.scrollHeight
+    );
+  }
+
+  static handleInfineteScroll(
+    element: HTMLElement,
+    callback: Function,
+    margin: number = 20
+  ) {
     let prevScrollTop = 0;
     element.addEventListener("scroll", (e) => {
       let scrollTop = element.scrollTop;
       let offsetHeight = element.offsetHeight;
       let scrollHeight = element.scrollHeight;
-      if (
-        offsetHeight + scrollTop >= scrollHeight &&
-        scrollTop != prevScrollTop
-      ) {
+
+      const isScrollChanged = scrollTop != prevScrollTop;
+
+      const isAtTheBottom = DomUtil.checkIsAtTheBottom({
+        scrollHeight,
+        scrollTop,
+        offsetHeight,
+        margin,
+      });
+
+      if (isAtTheBottom && isScrollChanged) {
         callback();
       }
       prevScrollTop = scrollTop;
