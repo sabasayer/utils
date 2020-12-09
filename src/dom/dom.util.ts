@@ -55,7 +55,7 @@ export abstract class DomUtil {
 
   static handleInfineteScroll(
     element: HTMLElement,
-    callback: Function,
+    callback: (scrollTop?: number) => void,
     margin: number = 20
   ) {
     let prevScrollTop = 0;
@@ -64,7 +64,7 @@ export abstract class DomUtil {
       let offsetHeight = element.offsetHeight;
       let scrollHeight = element.scrollHeight;
 
-      const isScrollChanged = scrollTop != prevScrollTop;
+      const isNewScrollBigger = scrollTop > prevScrollTop;
 
       const isAtTheBottom = DomUtil.checkIsAtTheBottom({
         scrollHeight,
@@ -73,8 +73,8 @@ export abstract class DomUtil {
         margin,
       });
 
-      if (isAtTheBottom && isScrollChanged) {
-        callback();
+      if (isAtTheBottom && isNewScrollBigger) {
+        callback(scrollTop);
       }
       prevScrollTop = scrollTop;
     });
