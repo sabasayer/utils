@@ -1,4 +1,4 @@
-import {ExtendArray} from "./src/extend";
+import {extendArray} from "./src/extend";
 
 import { PositionCalculaterUtil } from "./src/position-calculate/position-calculate.util";
 import { DataTrackerUtil } from "./src/data-tracker/data-tracker.util";
@@ -57,7 +57,7 @@ export {
   mapToArray,
   SortUtil,
   UuidUtil,
-  ExtendArray,
+  extendArray,
   EnumKeyboardKey,
   InputUtil
 };

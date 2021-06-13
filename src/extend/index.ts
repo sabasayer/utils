@@ -1,3 +1,3 @@
-import {ExtendArray} from './array/extend-array';
+import {extendArray} from './array/extend-array';
 
-export {ExtendArray};
+export {extendArray};

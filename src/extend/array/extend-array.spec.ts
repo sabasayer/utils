@@ -1,8 +1,9 @@
-import { ExtendArray } from "./extend-array";
+import { extendArray } from "./extend-array";
 import { GroupModel, GroupItem } from "../../data-group/data-group.interface";
-new ExtendArray();
 
 describe("extended array functions", () => {
+  extendArray();
+
   test("last", () => {
     let items: number[] = [1, 2, 3];
     expect(items.last()).toEqual(3);
@@ -166,5 +167,14 @@ describe("extended array functions", () => {
     items = items.distinct();
 
     expect(items.length).toEqual(3);
+  });
+
+  test("mapIf", () => {
+    const items = [1, 2, 3, 4, 5, 6];
+    const result = items.mapIf(
+      (e) => e,
+      (e) => e % 2 !== 0
+    );
+    expect(result).toEqual([1, 3, 5]);
   });
 });
