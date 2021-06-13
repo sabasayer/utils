@@ -1,8 +1,12 @@
-### Utilities For Typescript Web Projects
-
 ### Table of contents
 
-- [UniqueList](#uniquelist)
+- [Utilities For Web Projects](#utilities-for-web-projects)
+  - [UniqueList](#uniquelist)
+  - [ChainFunctions](#chainfunctions)
+
+## Utilities For Web Projects
+
+Some uitility classes.
 
 ### [UniqueList](#uniquelist)
 
@@ -31,4 +35,46 @@ const list = createUniqueList(
 list.remove({ id: 1 });
 
 // list = [{ id: 3 }]
+```
+
+### [ChainFunctions](#chainfunctions)
+
+Run functions consecutive with optional conditions.
+Next function uses previous functions return value.
+If any required condition is not met returns 'null'
+
+```typescript
+const chain = new ChainFunctions(
+  (value: number) => value + 2,
+  (value: number) => value * 3
+);
+
+const result = chain.run(1); // 9
+
+-------------
+//with condition
+const firstFn = (value: string) => value + "-";
+const secondFn = {
+    fn: (value: string) => value + ":",
+    when: (value: string) => value.indexOf("true") > -1,
+};
+
+const chain = new ChainFunctions(firstFn,secondFn);
+
+const result = chain.run("false"); // false-
+
+-------------
+//with required
+const firstFn = (value: number) => value * 10;
+const secondFn = {
+    fn: (value: number) => value * 10,
+    when: (value: number) => value < 100,
+    required: true,
+}
+const thirdFn = (value: number) => value * 2
+
+const chain = new ChainFunctions(firstFn,secondFn,thirdFn);
+
+const result = chain.run(10); // null
+
 ```
