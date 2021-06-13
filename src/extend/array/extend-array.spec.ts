@@ -34,7 +34,7 @@ describe("extended array functions", () => {
   test("find remove", () => {
     let items: { id: number }[] = [{ id: 12 }, { id: 23 }];
 
-    items.findRemove(e => e.id == 12);
+    items.findRemove((e) => e.id == 12);
 
     expect(items).toEqual([{ id: 23 }]);
   });
@@ -42,8 +42,8 @@ describe("extended array functions", () => {
   test("pushIf", () => {
     let items: number[] = [1, 3, 4, 5, 6];
 
-    items.pushIf(24, e => 24 > 10);
-    items.pushIf(8, e => 8 > 10);
+    items.pushIf(24, (e) => 24 > 10);
+    items.pushIf(8, (e) => 8 > 10);
 
     expect(items).toEqual([1, 3, 4, 5, 6, 24]);
   });
@@ -57,39 +57,41 @@ describe("extended array functions", () => {
   });
 
   test("forEachAsync", async () => {
-	  
-	let items:number[] = [1,2];
+    let items: number[] = [1, 2];
 
-	let otherItems:number[] = [6,7];
+    let otherItems: number[] = [6, 7];
 
-	const addItemFunction = async (e:number)=>{return new Promise(resolve => setTimeout(()=>{
-		items.push(e);
-		resolve();
-	}, 300))}
+    const addItemFunction = async (e: number) => {
+      return new Promise<void>((resolve) =>
+        setTimeout(() => {
+          items.push(e);
+          resolve();
+        }, 300)
+      );
+    };
 
-	await otherItems.forEachAsync(async e=>{
-		await addItemFunction(e);
-	});
+    await otherItems.forEachAsync(async (e) => {
+      await addItemFunction(e);
+    });
 
-	expect(items).toEqual([1,2,6,7]);
-
+    expect(items).toEqual([1, 2, 6, 7]);
   });
 
   test("toGroupModel", () => {
     let items: { value: string; id: number }[] = [
       { value: "first", id: 1 },
       { value: "second", id: 2 },
-      { value: "first", id: 3 }
+      { value: "first", id: 3 },
     ];
 
-    let group = items.toGroupModel(e => e.value);
+    let group = items.toGroupModel((e) => e.value);
 
     let expectGroup: GroupModel<{ value: string; id: number }> = {
       first: [
         { value: "first", id: 1 },
-        { value: "first", id: 3 }
+        { value: "first", id: 3 },
       ],
-      second: [{ value: "second", id: 2 }]
+      second: [{ value: "second", id: 2 }],
     };
 
     expect(JSON.stringify(group)).toEqual(JSON.stringify(expectGroup));
@@ -99,28 +101,28 @@ describe("extended array functions", () => {
     let items: { value: string; id: number }[] = [
       { value: "first", id: 1 },
       { value: "second", id: 2 },
-      { value: "first", id: 3 }
+      { value: "first", id: 3 },
     ];
 
-    let groupItems = items.toGroupItems(e => e.value);
+    let groupItems = items.toGroupItems((e) => e.value);
 
     let expectGroupItems: GroupItem<{ value: string; id: number }>[] = [
       {
         key: "first",
         values: [
           { value: "first", id: 1 },
-          { value: "first", id: 3 }
-        ]
+          { value: "first", id: 3 },
+        ],
       },
       {
         key: "second",
         values: [
           {
             value: "second",
-            id: 2
-          }
-        ]
-      }
+            id: 2,
+          },
+        ],
+      },
     ];
 
     expect(JSON.stringify(groupItems)).toEqual(
@@ -132,18 +134,18 @@ describe("extended array functions", () => {
     let items: { value: string; id: number }[] = [
       { value: "first", id: 1 },
       { value: "second", id: 2 },
-      { value: "first", id: 3 }
+      { value: "first", id: 3 },
     ];
 
-    let groupValues = items.toGroupModelValues(e => e.value);
+    let groupValues = items.toGroupModelValues((e) => e.value);
 
     let expectGroupValues: { value: string; id: number }[][] = [
       [
         { value: "first", id: 1 },
 
-        { value: "first", id: 3 }
+        { value: "first", id: 3 },
       ],
-      [{ value: "second", id: 2 }]
+      [{ value: "second", id: 2 }],
     ];
 
     expect(JSON.stringify(groupValues)).toEqual(
@@ -154,7 +156,7 @@ describe("extended array functions", () => {
   test("sum", () => {
     let items: { value: number }[] = [{ value: 1 }, { value: 2 }, { value: 3 }];
 
-    let sum = items.sum(e => e.value);
+    let sum = items.sum((e) => e.value);
 
     expect(sum).toEqual(6);
   });

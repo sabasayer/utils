@@ -1,4 +1,4 @@
-import { PositionCalculaterUtil } from "../..";
+import { PositionCalculaterUtil } from "../position-calculate/position-calculate.util";
 
 export abstract class DomUtil {
   static findParentElement(
