@@ -67,7 +67,7 @@ describe("Sort Util", () => {
         { name: "b", age: 1 },
       ];
 
-      sortUtil.sortMultiple(items, { field: "name", score: 1 }, { field: "age", score: 2 });
+      sortUtil.sortMultiple(items, { field: "name", priority: 1 }, { field: "age", priority: 2 });
 
       expect(items).toEqual([
         { name: "a", age: 2 },

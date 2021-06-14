@@ -1,6 +1,6 @@
 import { extendArray } from "./src/extend";
-import { positionCalculateUtil } from "./src/position-calculate/position-calculate.util";
-import { dataTrackerUtil } from "./src/data-tracker/data-tracker.util";
+import { positionCalculator,ElementDimensions } from "./src/position-calculate/position-calculate.util";
+import { dataChangeTracker } from "./src/data-tracker/data-tracker.util";
 import { getBrowserLang } from "./src/browser-language/browser-language.util";
 import { sessionStorageUtil, localStorageUtil, BrowserStorageUtil } from "./src/browser-storage/browser-storage.util";
 import { cacheUtil } from "./src/cache/cache.util";
@@ -29,8 +29,9 @@ import { GetPropValueType, getPropValue } from "./src/object-helper/object.helpe
 import { isFunction } from "./src/type-check/type-check";
 
 export {
-  positionCalculateUtil,
-  dataTrackerUtil,
+  positionCalculator,
+  ElementDimensions,
+  dataChangeTracker,
   sessionStorageUtil,
   localStorageUtil,
   BrowserStorageUtil,

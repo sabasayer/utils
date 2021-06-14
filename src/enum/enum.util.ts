@@ -10,7 +10,7 @@ export abstract class EnumUtil {
 
   static toValueTextPair<T>(
     enumType: T,
-    statement?: (enumValue: number) => boolean,
+    condition?: (enumValue: number) => boolean,
     textFn?: (enumValue: number) => string
   ): IValueTextPair[] {
     let items: IValueTextPair[] = [];
@@ -18,7 +18,7 @@ export abstract class EnumUtil {
       if (!isNaN(type as any)) {
         let number = parseInt(type);
 
-        if (!statement || statement(number)) {
+        if (!condition || condition(number)) {
           items.push({
             text: textFn ? textFn(type as any) : (enumType as any)[number],
             value: number,

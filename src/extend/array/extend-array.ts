@@ -4,24 +4,91 @@ import { getPropValue, GetPropValueType } from "../../object-helper/object.helpe
 
 declare global {
   interface Array<T> {
+    /**
+     * remove item from array. Needs exact match
+     * @param o item
+     */
     remove(o: T): number;
+    /**
+     * gets last item or array
+     */
     last(): T;
+    /**
+     * remove item with predicate
+     * @param findFunction item that matches will be removed
+     */
     findRemove(findFunction?: (item: T, index?: number, obj?: Array<T>) => boolean): void;
+    /**
+     *
+     * @param item item will be pushed
+     * @param statement will push if statement return true
+     */
     pushIf(item: T, statement?: (arr: Array<T>) => boolean): void;
+    /**
+     * Push array to array with optional conditions
+     * @param items item will be pushed
+     * @param statement add and if statement before every push
+     */
     pushRange(items: Array<T>, statement?: (item: T) => boolean): void;
+    /**
+     * Async foreach
+     * @param callback
+     */
     forEachAsync(callback: (item: T, index: number, array: T[]) => void): Promise<void>;
+    /**
+     * group array to an dictionary
+     * @param groupBy predicate for group key
+     */
     toGroupModel(groupBy: (item: T) => any): GroupModel<T>;
+    /**
+     * group array with a predicate and get only values
+     * @param groupBy predicate for group key
+     */
     toGroupModelValues(groupBy: (item: T) => any): T[][];
+    /**
+     * sum all numbers that returned from predicate
+     * @param statement number for each item
+     */
     sum(statement: (item: T) => number): number;
+    /**
+     * Group array to objects
+     * @param groupBy predicate for group key
+     * @param itemChildProp get children prop
+     * @param childGroupBy group children as well
+     */
     toGroupItems<ChildType = T>(
       groupBy: (item: T) => any,
       itemChildProp?: (item: T) => any,
       childGroupBy?: (item: ChildType) => any
     ): GroupItem<T, ChildType>[];
+    /**
+     * Distinct items
+     * @param getProp predicate or field string
+     */
     distinct(getProp?: GetPropValueType<T>): Array<T>;
+    /**
+     * map with condition
+     * @param map map method
+     * @param condition condition to check before map
+     */
     mapIf<T2>(map: (item: T) => T2, condition: (item: T) => boolean): Array<T2>;
+    /**
+     * filter array items if theye are in collection
+     * @param getProp get prop
+     * @param collection will check if prop value is in collection
+     */
     filterByCollection<T2>(getProp: (item: T) => T2, collection: T2[]): T[];
+    /**
+     * filter array items if there are not in collection
+     * @param getProp get prop
+     * @param collection will check if prop value is not in collection
+     */
     filterByExcludesCollection<T2>(getProp: (item: T) => T2, collection: T2[]): T[];
+    /**
+     * find first array item that in collection
+     * @param getProp get prop
+     * @param collection will check if prop value is in collection
+     */
     findByCollection<T2>(getProp: (item: T) => T2, collection: T2[]): T;
   }
 }

@@ -1,4 +1,4 @@
-import { positionCalculateUtil } from "../position-calculate/position-calculate.util";
+import { positionCalculator } from "../position-calculate/position-calculate.util";
 
 export class DomUtil {
   findParentElement(el: HTMLElement, classValue?: string, id?: string): HTMLElement | null {
@@ -28,7 +28,7 @@ export class DomUtil {
   }
 
   touchPositionInelement(event: TouchEvent, parent: HTMLElement) {
-    let canvasOffset = positionCalculateUtil.offset(parent);
+    let canvasOffset = positionCalculator.offset(parent);
     let firstTouch = event.touches[0];
     let x = firstTouch.clientX - canvasOffset.left;
     let y = firstTouch.clientY - canvasOffset.top;

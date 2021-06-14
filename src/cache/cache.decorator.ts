@@ -1,22 +1,22 @@
 import { EnumCacheType } from "./cache-type.enum";
-import { CacheUtil } from "./cache.util";
+import { cacheUtil } from "./cache.util";
 
 export function cache(type: EnumCacheType): MethodDecorator {
-  return CacheUtil.cache(type);
+  return cacheUtil.cache(type);
 }
 
 export function cacheToMemory(): MethodDecorator {
-  return CacheUtil.cache(EnumCacheType.Memory);
+  return cacheUtil.cache(EnumCacheType.Memory);
 }
 
 export function cacheToLocalStorage(): MethodDecorator {
-  return CacheUtil.cache(EnumCacheType.LocalStorage);
+  return cacheUtil.cache(EnumCacheType.LocalStorage);
 }
 
 export function cacheToSessionStorage(): MethodDecorator {
-  return CacheUtil.cache(EnumCacheType.SessionStorage);
+  return cacheUtil.cache(EnumCacheType.SessionStorage);
 }
 
 export function cacheToIndexedDB(): MethodDecorator {
-  return CacheUtil.cache(EnumCacheType.IndexedDB);
+  return cacheUtil.cache(EnumCacheType.IndexedDB);
 }

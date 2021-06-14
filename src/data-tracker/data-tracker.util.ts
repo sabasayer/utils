@@ -1,7 +1,7 @@
 import cloneDeep from "lodash.clonedeep";
 import { uuidv4 } from "../uuid/uuid.util";
 
-export class DataTrackerUtil {
+export class DataChangeTracker {
   private dataStore: {
     [key: string]: any;
   } = {};
@@ -21,4 +21,4 @@ export class DataTrackerUtil {
   }
 }
 
-export const dataTrackerUtil = new DataTrackerUtil();
+export const dataChangeTracker = new DataChangeTracker();

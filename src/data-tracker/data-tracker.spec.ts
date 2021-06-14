@@ -1,26 +1,26 @@
-import { dataTrackerUtil } from "./data-tracker.util";
+import { dataChangeTracker } from "./data-tracker.util";
 
 describe("data tracker tests", () => {
   test("primative data change", () => {
     let data: string = "test";
-    let uuid = dataTrackerUtil.registerData(data);
+    let uuid = dataChangeTracker.registerData(data);
     data = "test2";
-    expect(dataTrackerUtil.isDataChanged(uuid, data)).toBeTruthy();
+    expect(dataChangeTracker.isDataChanged(uuid, data)).toBeTruthy();
   });
 
   test("when manual id is set", () => {
     let data: string = "test";
-    dataTrackerUtil.registerData(data, "1");
+    dataChangeTracker.registerData(data, "1");
     data = "test2";
-    expect(dataTrackerUtil.isDataChanged("1", data)).toBeTruthy();
+    expect(dataChangeTracker.isDataChanged("1", data)).toBeTruthy();
   });
 
   test("primative data not changed", () => {
     let data: string = "test";
-    let uuid = dataTrackerUtil.registerData(data);
+    let uuid = dataChangeTracker.registerData(data);
     data = "test2";
     data = "test";
-    expect(dataTrackerUtil.isDataChanged(uuid, data)).toBeFalsy();
+    expect(dataChangeTracker.isDataChanged(uuid, data)).toBeFalsy();
   });
 
   test("object data change", () => {
@@ -29,9 +29,9 @@ describe("data tracker tests", () => {
       surname: "sayer",
     };
 
-    let uuid = dataTrackerUtil.registerData(data);
+    let uuid = dataChangeTracker.registerData(data);
     data.name = "baki";
-    expect(dataTrackerUtil.isDataChanged(uuid, data)).toBeTruthy();
+    expect(dataChangeTracker.isDataChanged(uuid, data)).toBeTruthy();
   });
 
   test("nest object change", () => {
@@ -50,8 +50,8 @@ describe("data tracker tests", () => {
       ],
     };
 
-    let uuid = dataTrackerUtil.registerData(data);
+    let uuid = dataChangeTracker.registerData(data);
     data.users[0].comments[0].text = "test2";
-    expect(dataTrackerUtil.isDataChanged(uuid, data)).toBeTruthy();
+    expect(dataChangeTracker.isDataChanged(uuid, data)).toBeTruthy();
   });
 });

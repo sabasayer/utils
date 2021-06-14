@@ -18,7 +18,7 @@ export interface ElementDimensions {
   height: number;
 }
 
-export class PositionCalculaterUtil {
+export class PositionCalculator {
   private outPositionTolerance: number = 20;
 
   offset(el: HTMLElement) {
@@ -155,4 +155,4 @@ export class PositionCalculaterUtil {
   }
 }
 
-export const positionCalculateUtil = new PositionCalculaterUtil();
+export const positionCalculator = new PositionCalculator();

@@ -4,7 +4,7 @@ import { getPropValue, GetPropValueType } from "../object-helper/object.helper";
 
 export type SortOption<T> = {
   field: GetPropValueType<T>;
-  score: number;
+  priority: number;
   desc?: boolean;
 };
 
@@ -16,7 +16,7 @@ export class SortUtil {
   }
 
   sortMultiple<T>(items: T[], ...options: SortOption<T>[]) {
-    const orderedOptions = [...options].sort((a, b) => a.score - b.score);
+    const orderedOptions = [...options].sort((a, b) => a.priority - b.priority);
 
     items.sort((a, b) => {
       for (const option of orderedOptions) {

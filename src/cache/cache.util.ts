@@ -34,7 +34,7 @@ export class CacheUtil {
     sessionStorageUtil.removeItem(key);
   };
 
-  addToCache(type: EnumCacheType, key: string, data: any) {
+  add(type: EnumCacheType, key: string, data: any) {
     if (data == undefined) return;
     switch (type) {
       case EnumCacheType.Memory:
@@ -52,7 +52,7 @@ export class CacheUtil {
     }
   }
 
-  getFromCache(type: EnumCacheType, key: string) {
+  get(type: EnumCacheType, key: string) {
     switch (type) {
       case EnumCacheType.Memory:
         return this.getFromMemory(key);
@@ -66,7 +66,7 @@ export class CacheUtil {
     }
   }
 
-  clearCache(type: EnumCacheType, key: string) {
+  clear(type: EnumCacheType, key: string) {
     switch (type) {
       case EnumCacheType.Memory:
         return this.clearMemory(key);
@@ -93,11 +93,11 @@ export class CacheUtil {
 
         key = target.name + "_" + propertyKey.toString() + "_" + key;
 
-        let data = self.getFromCache(type, key);
+        let data = self.get(type, key);
         if (data) return data;
 
         let res = await originalMethod.apply(this, args);
-        self.addToCache(type, key, res);
+        self.add(type, key, res);
         return res;
       };
 
