@@ -1,56 +1,50 @@
-import {
-  LocalStorageUtil,
-  SessionStorageUtil
-} from "../browser-storage/browser-storage.util";
+import { localStorageUtil, sessionStorageUtil } from "../browser-storage/browser-storage.util";
 import { EnumCacheType } from "./cache-type.enum";
 
-export abstract class CacheUtil {
-  private static data: { [key: string]: any } = {};
+export class CacheUtil {
+  private data: { [key: string]: any } = {};
 
-  private static addToMemory = (key: string, data: any) =>
-    (CacheUtil.data[key] = data);
+  private addToMemory = (key: string, data: any) => (this.data[key] = data);
 
-  private static getFromMemory = (key: string) => CacheUtil.data[key];
+  private getFromMemory = (key: string) => this.data[key];
 
-  private static clearMemory = (key: string) => delete CacheUtil.data[key];
+  private clearMemory = (key: string) => delete this.data[key];
 
-  private static addToLocalStorage = (key: string, data: any) =>
-    LocalStorageUtil.setItem(key, JSON.stringify(data));
+  private addToLocalStorage = (key: string, data: any) => localStorageUtil.setItem(key, JSON.stringify(data));
 
-  private static getFromLocalStorage = (key: string) => {
-    let data = LocalStorageUtil.getItem(key);
+  private getFromLocalStorage = (key: string) => {
+    let data = localStorageUtil.getItem(key);
     if (data) return JSON.parse(data);
     return null;
   };
 
-  private static clearLocalStorage = (key: string) => {
-    LocalStorageUtil.removeItem(key)
-  }
+  private clearLocalStorage = (key: string) => {
+    localStorageUtil.removeItem(key);
+  };
 
-  private static addToSessionStorage = (key: string, data: any) =>
-    SessionStorageUtil.setItem(key, JSON.stringify(data));
+  private addToSessionStorage = (key: string, data: any) => sessionStorageUtil.setItem(key, JSON.stringify(data));
 
-  private static getFromSessionStorage = (key: string) => {
-    let data = SessionStorageUtil.getItem(key);
+  private getFromSessionStorage = (key: string) => {
+    let data = sessionStorageUtil.getItem(key);
     if (data) return JSON.parse(data);
     return null;
   };
 
-  private static clearSessionStorage = (key: string) => {
-    SessionStorageUtil.removeItem(key)
-  }
+  private clearSessionStorage = (key: string) => {
+    sessionStorageUtil.removeItem(key);
+  };
 
-  static addToCache(type: EnumCacheType, key: string, data: any) {
+  addToCache(type: EnumCacheType, key: string, data: any) {
     if (data == undefined) return;
     switch (type) {
       case EnumCacheType.Memory:
-        CacheUtil.addToMemory(key, data);
+        this.addToMemory(key, data);
         break;
       case EnumCacheType.SessionStorage:
-        CacheUtil.addToSessionStorage(key, data);
+        this.addToSessionStorage(key, data);
         break;
       case EnumCacheType.LocalStorage:
-        CacheUtil.addToLocalStorage(key, data);
+        this.addToLocalStorage(key, data);
         break;
       case EnumCacheType.IndexedDB:
         //TODO: indexedDb set
@@ -58,40 +52,37 @@ export abstract class CacheUtil {
     }
   }
 
-  static getFromCache(type: EnumCacheType, key: string) {
+  getFromCache(type: EnumCacheType, key: string) {
     switch (type) {
       case EnumCacheType.Memory:
-        return CacheUtil.getFromMemory(key);
+        return this.getFromMemory(key);
       case EnumCacheType.SessionStorage:
-        return CacheUtil.getFromSessionStorage(key);
+        return this.getFromSessionStorage(key);
       case EnumCacheType.LocalStorage:
-        return CacheUtil.getFromLocalStorage(key);
+        return this.getFromLocalStorage(key);
       case EnumCacheType.IndexedDB:
         //TODO: indexedDb get
         break;
     }
   }
 
-  static clearCache(type: EnumCacheType, key: string) {
+  clearCache(type: EnumCacheType, key: string) {
     switch (type) {
       case EnumCacheType.Memory:
-        return CacheUtil.clearMemory(key);
+        return this.clearMemory(key);
       case EnumCacheType.SessionStorage:
-        return CacheUtil.clearSessionStorage(key);
+        return this.clearSessionStorage(key);
       case EnumCacheType.LocalStorage:
-        return CacheUtil.clearLocalStorage(key);
+        return this.clearLocalStorage(key);
       case EnumCacheType.IndexedDB:
         //TODO: indexedDb get
         break;
     }
   }
 
-  static cache(type: EnumCacheType): MethodDecorator {
-    return function (
-      target: any,
-      propertyKey: string | symbol,
-      descriptor: PropertyDescriptor
-    ) {
+  cache(type: EnumCacheType): MethodDecorator {
+    const self = this;
+    return function (target: any, propertyKey: string | symbol, descriptor: PropertyDescriptor) {
       const originalMethod = descriptor.value;
 
       descriptor.value = async function (...args: any[]) {
@@ -102,11 +93,11 @@ export abstract class CacheUtil {
 
         key = target.name + "_" + propertyKey.toString() + "_" + key;
 
-        let data = CacheUtil.getFromCache(type, key);
+        let data = self.getFromCache(type, key);
         if (data) return data;
 
         let res = await originalMethod.apply(this, args);
-        CacheUtil.addToCache(type, key, res);
+        self.addToCache(type, key, res);
         return res;
       };
 
@@ -114,3 +105,5 @@ export abstract class CacheUtil {
     };
   }
 }
+
+export const cacheUtil = new CacheUtil();

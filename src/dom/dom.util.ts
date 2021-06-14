@@ -1,20 +1,14 @@
-import { PositionCalculaterUtil } from "../position-calculate/position-calculate.util";
+import { positionCalculateUtil } from "../position-calculate/position-calculate.util";
 
-export abstract class DomUtil {
-  static findParentElement(
-    el: HTMLElement,
-    classValue?: string,
-    id?: string
-  ): HTMLElement | null {
+export class DomUtil {
+  findParentElement(el: HTMLElement, classValue?: string, id?: string): HTMLElement | null {
     if (!classValue && !id) return null;
 
     let parentEl = el.parentElement;
     while (parentEl) {
       if (
         (id && parentEl.getAttribute("id") == id) ||
-        (classValue &&
-          parentEl.classList &&
-          parentEl.classList.contains(classValue))
+        (classValue && parentEl.classList && parentEl.classList.contains(classValue))
       ) {
         break;
       } else {
@@ -25,7 +19,7 @@ export abstract class DomUtil {
     return parentEl;
   }
 
-  static randomColor() {
+  randomColor() {
     let r = Math.floor(Math.random() * 255);
     let g = Math.floor(Math.random() * 255);
     let b = Math.floor(Math.random() * 255);
@@ -33,31 +27,19 @@ export abstract class DomUtil {
     return `rgb(${r},${g},${b})`;
   }
 
-  static touchPositionInelement(event: TouchEvent, parent: HTMLElement) {
-    let canvasOffset = PositionCalculaterUtil.offset(parent);
+  touchPositionInelement(event: TouchEvent, parent: HTMLElement) {
+    let canvasOffset = positionCalculateUtil.offset(parent);
     let firstTouch = event.touches[0];
     let x = firstTouch.clientX - canvasOffset.left;
     let y = firstTouch.clientY - canvasOffset.top;
     return { x, y };
   }
 
-  static checkIsAtTheBottom(options: {
-    offsetHeight: number;
-    scrollTop: number;
-    margin: number;
-    scrollHeight: number;
-  }) {
-    return (
-      options.offsetHeight + options.scrollTop + options.margin >=
-      options.scrollHeight
-    );
+  checkIsAtTheBottom(options: { offsetHeight: number; scrollTop: number; margin: number; scrollHeight: number }) {
+    return options.offsetHeight + options.scrollTop + options.margin >= options.scrollHeight;
   }
 
-  static handleInfineteScroll(
-    element: HTMLElement,
-    callback: (scrollTop?: number) => void,
-    margin: number = 20
-  ) {
+  handleInfineteScroll(element: HTMLElement, callback: (scrollTop?: number) => void, margin: number = 20) {
     let prevScrollTop = 0;
     element.addEventListener("scroll", (e) => {
       let scrollTop = element.scrollTop;
@@ -66,7 +48,7 @@ export abstract class DomUtil {
 
       const isNewScrollBigger = scrollTop > prevScrollTop;
 
-      const isAtTheBottom = DomUtil.checkIsAtTheBottom({
+      const isAtTheBottom = this.checkIsAtTheBottom({
         scrollHeight,
         scrollTop,
         offsetHeight,
@@ -80,3 +62,5 @@ export abstract class DomUtil {
     });
   }
 }
+
+export const domUtil = new DomUtil();

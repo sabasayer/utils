@@ -1,11 +1,11 @@
-import { DecimalUtil } from "./decimal.util";
+import { decimalUtil } from "./decimal.util";
 
-describe("Decimal Util",()=>{
-    it("has three precision after coma",()=>{
-        let value = 0.02314665;
+describe("Decimal Util", () => {
+  it("has three precision after coma", () => {
+    let value = 0.02314665;
 
-        let newValue = DecimalUtil.toFixedNumber(value,3);
+    let newValue = decimalUtil.toFixedNumber(value, 3);
 
-        expect(newValue).toEqual(0.023);
-    })
-})
+    expect(newValue).toEqual(0.023);
+  });
+});

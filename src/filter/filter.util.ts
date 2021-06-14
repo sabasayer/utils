@@ -1,16 +1,13 @@
 import { DateUtil } from "../date/date.util";
-import { BrowserLanguageUtil } from "../browser-language/browser-language.util";
+import { getBrowserLang } from "../browser-language/browser-language.util";
+import { getPropValue, GetPropValueType } from "../object-helper/object.helper";
 
-export abstract class FilterUtil {
-  static compareFn<T>(
-    item: T,
-    getProp: (item: T) => any,
-    term: string
-  ): boolean {
-    let prop = getProp(item);
-    if (!prop) false;
+export class FilterUtil {
+  compareFn<T>(item: T, getProp: GetPropValueType<T>, term: string): boolean {
+    let prop = getPropValue(item, getProp);
+    if (prop === undefined) false;
 
-    term = term.trim().toLocaleLowerCase(BrowserLanguageUtil.getBrowserLang());
+    term = term.trim().toLocaleLowerCase(getBrowserLang());
 
     if (typeof prop === "string") {
       if (DateUtil.checkApiStringValidity(prop)) {
@@ -21,17 +18,17 @@ export abstract class FilterUtil {
         return dateString == term;
       }
 
-      return (
-        prop
-          .toLocaleLowerCase(BrowserLanguageUtil.getBrowserLang())
-          .indexOf(term) > -1
-      );
+      return prop.toLocaleLowerCase(getBrowserLang()).indexOf(term) > -1;
     }
 
     return prop == term;
   }
 
-  static filter<T>(items: T[], getProp: (item: T) => any, term: string): T[] {
-    return items.filter(e => FilterUtil.compareFn(e, getProp, term));
+  filter<T>(items: T[], term: string, ...filterMethods: GetPropValueType<T>[]): T[] {
+    return items.filter((e) => {
+      return filterMethods.some((method) => this.compareFn(e, method, term));
+    });
   }
 }
+
+export const filterUtil = new FilterUtil();

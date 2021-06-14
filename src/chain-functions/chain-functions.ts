@@ -23,7 +23,7 @@ export class ChainFunctions {
         args = ring(...argsArray);
       } else {
         const isMet = ring.when(...argsArray);
-        
+
         if (isMet) args = ring.fn(...argsArray);
         else if (ring.required) return null;
       }

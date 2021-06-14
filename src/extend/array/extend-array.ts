@@ -1,18 +1,15 @@
-import { DataGroupUtil } from "../../data-group/data-group.util";
+import { dataGroupUtil } from "../../data-group/data-group.util";
 import { GroupItem, GroupModel } from "../../data-group/data-group.interface";
+import { getPropValue, GetPropValueType } from "../../object-helper/object.helper";
 
 declare global {
   interface Array<T> {
     remove(o: T): number;
     last(): T;
-    findRemove(
-      findFunction?: (item: T, index?: number, obj?: Array<T>) => boolean
-    ): void;
+    findRemove(findFunction?: (item: T, index?: number, obj?: Array<T>) => boolean): void;
     pushIf(item: T, statement?: (arr: Array<T>) => boolean): void;
     pushRange(items: Array<T>, statement?: (item: T) => boolean): void;
-    forEachAsync(
-      callback: (item: T, index: number, array: T[]) => void
-    ): Promise<void>;
+    forEachAsync(callback: (item: T, index: number, array: T[]) => void): Promise<void>;
     toGroupModel(groupBy: (item: T) => any): GroupModel<T>;
     toGroupModelValues(groupBy: (item: T) => any): T[][];
     sum(statement: (item: T) => number): number;
@@ -21,7 +18,7 @@ declare global {
       itemChildProp?: (item: T) => any,
       childGroupBy?: (item: ChildType) => any
     ): GroupItem<T, ChildType>[];
-    distinct(): Array<T>;
+    distinct(getProp?: GetPropValueType<T>): Array<T>;
     mapIf<T2>(map: (item: T) => T2, condition: (item: T) => boolean): Array<T2>;
   }
 }
@@ -74,9 +71,7 @@ const findRemove = () => {
 const pushIf = () => {
   if (!!Array.prototype.pushIf) return;
 
-  defineNewMethod("pushIf", function <
-    T
-  >(this: T[], item: T, statement: (item: T[]) => boolean) {
+  defineNewMethod("pushIf", function <T>(this: T[], item: T, statement: (item: T[]) => boolean) {
     if (statement(this)) {
       this.push(item);
     }
@@ -86,9 +81,7 @@ const pushIf = () => {
 const pushRange = () => {
   if (!!Array.prototype.pushRange) return;
 
-  defineNewMethod("pushRange", function <
-    T
-  >(this: T[], items: T[], statement?: (item: T) => boolean): void {
+  defineNewMethod("pushRange", function <T>(this: T[], items: T[], statement?: (item: T) => boolean): void {
     for (let i = 0, len = items.length; i < len; i++) {
       if (!statement || statement(items[i])) this.push(items[i]);
     }
@@ -110,10 +103,8 @@ const forEachAsync = () => {
 const toGroupModel = () => {
   if (!!Array.prototype.toGroupModel) return;
 
-  defineNewMethod("toGroupModel", function <
-    T
-  >(this: T[], groupBy: (item: T) => any) {
-    return DataGroupUtil.toGroupModel(this, groupBy);
+  defineNewMethod("toGroupModel", function <T>(this: T[], groupBy: (item: T) => any) {
+    return dataGroupUtil.toGroupModel(this, groupBy);
   });
 };
 
@@ -124,21 +115,14 @@ const toGroupItems = () => {
     T,
     ChildType = T
   >(this: T[], groupBy: (item: T) => any, itemChildProp?: (item: T) => any, childGroupBy?: (item: ChildType) => any) {
-    return DataGroupUtil.toGroupItems(
-      this,
-      groupBy,
-      itemChildProp,
-      childGroupBy
-    );
+    return dataGroupUtil.toGroupItems(this, groupBy, itemChildProp, childGroupBy);
   });
 };
 
 const toGroupModelValues = () => {
   if (!!Array.prototype.toGroupModelValues) return;
 
-  defineNewMethod("toGroupModelValues", function <
-    T
-  >(this: T[], groupBy: (item: T) => any) {
+  defineNewMethod("toGroupModelValues", function <T>(this: T[], groupBy: (item: T) => any) {
     return Object.values(this.toGroupModel(groupBy));
   });
 };
@@ -146,9 +130,7 @@ const toGroupModelValues = () => {
 const sum = () => {
   if (!!Array.prototype.sum) return;
 
-  defineNewMethod("sum", function <
-    T
-  >(this: T[], statement: (item: T) => number) {
+  defineNewMethod("sum", function <T>(this: T[], statement: (item: T) => number) {
     let total = 0;
     for (let i = 0, _len = this.length; i < _len; i++) {
       total += statement(this[i]);
@@ -160,8 +142,13 @@ const sum = () => {
 const distinct = () => {
   if (!!Array.prototype.distinct) return;
 
-  defineNewMethod("distinct", function <T>(this: T[]) {
+  defineNewMethod("distinct", function <T>(this: T[], getProp?: GetPropValueType<T>) {
     return this.filter((e: T, index: number, arr: Array<T>) => {
+      if (getProp) {
+        const value = getPropValue(e, getProp);
+
+        return arr.findIndex((item) => getPropValue(item, getProp) === value) === index;
+      }
       return arr.indexOf(e) === index;
     });
   });
@@ -170,10 +157,7 @@ const distinct = () => {
 const mapIf = () => {
   if (!!Array.prototype.mapIf) return;
 
-  defineNewMethod("mapIf", function <
-    T,
-    T2
-  >(this: T[], map: (item: T) => T2, condition: (item: T) => boolean) {
+  defineNewMethod("mapIf", function <T, T2>(this: T[], map: (item: T) => T2, condition: (item: T) => boolean) {
     let res: T2[] = [];
     for (const item of this) {
       if (condition(item)) res.push(map(item));

@@ -1,36 +1,45 @@
 import cloneDeep from "lodash.clonedeep";
-import { DateUtil } from "../date/date.util";
-import { BrowserLanguageUtil } from "../browser-language/browser-language.util";
+import { getBrowserLang } from "../browser-language/browser-language.util";
+import { getPropValue, GetPropValueType } from "../object-helper/object.helper";
 
-export abstract class SortUtil {
-  static readonly undefinedSortValue: string = "-999999999";
+export type SortOption<T> = {
+  field: GetPropValueType<T>;
+  score: number;
+  desc?: boolean;
+};
 
-  static compareFn<T>(
-    prevValue: T,
-    value: T,
-    getProp: (item: T) => any,
-    desc: boolean = false
-  ) {
+export class SortUtil {
+  private readonly undefinedSortValue: string = "-999999999";
+
+  sort<T>(items: T[], fieldFn: GetPropValueType<T>, desc: boolean = false) {
+    items.sort((a, b) => this.compareFn(a, b, fieldFn, desc));
+  }
+
+  sortMultiple<T>(items: T[], ...options: SortOption<T>[]) {
+    const orderedOptions = [...options].sort((a, b) => a.score - b.score);
+
+    items.sort((a, b) => {
+      for (const option of orderedOptions) {
+        const res = this.compareFn(a, b, option.field, option.desc);
+        if (res !== 0) return res;
+      }
+
+      return 0;
+    });
+  }
+
+  compareFn<T>(prevValue: T, value: T, getProp: GetPropValueType<T>, desc: boolean = false) {
     let prevClone = cloneDeep(prevValue);
     let valueClone = cloneDeep(value);
 
-    let x = getProp(prevClone) ?? SortUtil.undefinedSortValue;
-    let y = getProp(valueClone) ?? SortUtil.undefinedSortValue;
+    let x = this.getPropValue(prevClone, getProp);
+    let y = this.getPropValue(valueClone, getProp);
 
     if (typeof x === "string" && typeof y === "string") {
-      let xDateValue = new Date(x);
-      let yDateValue = new Date(y);
-      if (
-        DateUtil.checkDateValidity(xDateValue) &&
-        DateUtil.checkDateValidity(yDateValue)
-      ) {
-        return this.sortNumberOrDate(xDateValue, yDateValue, desc);
-      }
+      x = x.toLocaleLowerCase(getBrowserLang());
+      y = y.toLocaleLowerCase(getBrowserLang());
 
-      x = x.toLocaleLowerCase(BrowserLanguageUtil.getBrowserLang());
-      y = y.toLocaleLowerCase(BrowserLanguageUtil.getBrowserLang());
-      
-      let compareRes = (x as string).localeCompare(y,BrowserLanguageUtil.getBrowserLang());
+      let compareRes = (x as string).localeCompare(y, getBrowserLang());
       return desc ? compareRes * -1 : compareRes;
     }
 
@@ -57,7 +66,11 @@ export abstract class SortUtil {
     return 0;
   }
 
-  static sortNumberOrDate(x: number | Date, y: number | Date, desc: boolean) {
+  getPropValue<T>(value: T, getProp: GetPropValueType<T>) {
+    return getPropValue(value, getProp) ?? this.undefinedSortValue;
+  }
+
+  sortNumberOrDate(x: number | Date, y: number | Date, desc: boolean) {
     if (desc) {
       if (x < y) {
         return 1;
@@ -77,3 +90,5 @@ export abstract class SortUtil {
     return 0;
   }
 }
+
+export const sortUtil = new SortUtil();

@@ -126,9 +126,7 @@ describe("extended array functions", () => {
       },
     ];
 
-    expect(JSON.stringify(groupItems)).toEqual(
-      JSON.stringify(expectGroupItems)
-    );
+    expect(JSON.stringify(groupItems)).toEqual(JSON.stringify(expectGroupItems));
   });
 
   test("toGroupModelValues", () => {
@@ -149,9 +147,7 @@ describe("extended array functions", () => {
       [{ value: "second", id: 2 }],
     ];
 
-    expect(JSON.stringify(groupValues)).toEqual(
-      JSON.stringify(expectGroupValues)
-    );
+    expect(JSON.stringify(groupValues)).toEqual(JSON.stringify(expectGroupValues));
   });
 
   test("sum", () => {
@@ -167,6 +163,13 @@ describe("extended array functions", () => {
     items = items.distinct();
 
     expect(items.length).toEqual(3);
+  });
+
+  test("distinc with field", () => {
+    let items = [{ name: "ali" }, { name: "ali" }, { name: "veli" }];
+    items = items.distinct((e) => e.name);
+
+    expect(items).toEqual([{ name: "ali" }, { name: "veli" }]);
   });
 
   test("mapIf", () => {

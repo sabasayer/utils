@@ -39,8 +39,7 @@ describe("Chain Functions", () => {
   it("should run async", async () => {
     const chain = new ChainFunctions(
       (value: number) => value + 1,
-      async (value: number) =>
-        new Promise((resolve) => setTimeout(() => resolve(value + 1), 100)),
+      async (value: number) => new Promise((resolve) => setTimeout(() => resolve(value + 1), 100)),
       (value: number) => value / 2
     );
 

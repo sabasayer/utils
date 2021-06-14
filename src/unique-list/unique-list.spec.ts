@@ -9,10 +9,7 @@ describe("Unique List", () => {
     });
 
     it("should not add same item", () => {
-      const list = createUniqueList(
-        (a: number, b: number) => a === b,
-        [1, 2, 3]
-      );
+      const list = createUniqueList((a: number, b: number) => a === b, [1, 2, 3]);
       list.push(2);
       expect(list).toEqual([1, 2, 3]);
     });
@@ -21,10 +18,7 @@ describe("Unique List", () => {
   describe("remove", () => {
     it("should remove item by comparing", () => {
       type ListItem = { id: number };
-      const list = createUniqueList(
-        (a: ListItem, b: ListItem) => a.id === b.id,
-        [{ id: 1 }, { id: 3 }]
-      );
+      const list = createUniqueList((a: ListItem, b: ListItem) => a.id === b.id, [{ id: 1 }, { id: 3 }]);
 
       list.remove({ id: 1 });
 
