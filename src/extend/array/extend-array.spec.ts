@@ -180,4 +180,28 @@ describe("extended array functions", () => {
     );
     expect(result).toEqual([1, 3, 5]);
   });
+
+  test("filterByCollection", () => {
+    const items = [{ id: 1 }, { id: 2 }, { id: 3 }];
+
+    const result = items.filterByCollection((e) => e.id, [1, 3]);
+
+    expect(result).toEqual([{ id: 1 }, { id: 3 }]);
+  });
+
+  test("filterByExcludesCollection", () => {
+    const items = [{ id: 1 }, { id: 2 }, { id: 3 }];
+
+    const result = items.filterByExcludesCollection((e) => e.id, [1, 3]);
+
+    expect(result).toEqual([{ id: 2 }]);
+  });
+
+  test("findByCollection", () => {
+    const items = [{ id: 1 }, { id: 2 }, { id: 3 }];
+
+    const result = items.findByCollection((e) => e.id, [1, 3]);
+
+    expect(result).toEqual({ id: 1 });
+  });
 });

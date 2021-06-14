@@ -8,7 +8,7 @@
     "build": "node pre-build.js && tsc",
     "test": "jest",
     "npm-publish": "npm publish --access public",
-    "pretty": "prettier --write \"**/*.ts\"" 
+    "pretty": "prettier --write \"**/*.ts\""
   },
   "dependencies": {
     "lodash.clonedeep": "^4.5.0"

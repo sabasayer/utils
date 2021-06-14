@@ -20,6 +20,9 @@ declare global {
     ): GroupItem<T, ChildType>[];
     distinct(getProp?: GetPropValueType<T>): Array<T>;
     mapIf<T2>(map: (item: T) => T2, condition: (item: T) => boolean): Array<T2>;
+    filterByCollection<T2>(getProp: (item: T) => T2, collection: T2[]): T[];
+    filterByExcludesCollection<T2>(getProp: (item: T) => T2, collection: T2[]): T[];
+    findByCollection<T2>(getProp: (item: T) => T2, collection: T2[]): T;
   }
 }
 
@@ -167,6 +170,33 @@ const mapIf = () => {
   });
 };
 
+const filterByCollection = () => {
+  if (!!Array.prototype.filterByCollection) return;
+
+  defineNewMethod("filterByCollection", function <T, T2>(this: T[], getProp: (item: T) => T2, collection: T2[]) {
+    return this.filter((e) => collection.includes(getProp(e)));
+  });
+};
+
+const filterByExcludesCollection = () => {
+  if (!!Array.prototype.filterByExcludesCollection) return;
+
+  defineNewMethod("filterByExcludesCollection", function <
+    T,
+    T2
+  >(this: T[], getProp: (item: T) => T2, collection: T2[]) {
+    return this.filter((e) => !collection.includes(getProp(e)));
+  });
+};
+
+const findByCollection = () => {
+  if (!!Array.prototype.findByCollection) return;
+
+  defineNewMethod("findByCollection", function <T, T2>(this: T[], getProp: (item: T) => T2, collection: T2[]) {
+    return this.find((e) => collection.includes(getProp(e)));
+  });
+};
+
 export const extendArray = () => {
   remove();
   last();
@@ -180,4 +210,7 @@ export const extendArray = () => {
   toGroupItems();
   distinct();
   mapIf();
+  filterByCollection();
+  filterByExcludesCollection();
+  findByCollection();
 };
