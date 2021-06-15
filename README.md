@@ -297,23 +297,37 @@ multiple extended methods for array prototype. call **extendArray()** method to 
 
 ```Typescript
 remove(o: T): number;
+
 last(): T;
+
 findRemove(findFunction?: (item: T, index?: number, obj?: Array<T>) => boolean): void;
+
 pushIf(item: T, statement?: (arr: Array<T>) => boolean): void;
+
 pushRange(items: Array<T>, statement?: (item: T) => boolean): void;
+
 forEachAsync(callback: (item: T, index: number, array: T[]) => void): Promise<void>;
+
 toGroupModel(groupBy: (item: T) => any): GroupModel<T>;
+
 toGroupModelValues(groupBy: (item: T) => any): T[][];
+
 sum(statement: (item: T) => number): number;
+
 toGroupItems<ChildType = T>(
   groupBy: (item: T) => any,
   itemChildProp?: (item: T) => any,
   childGroupBy?: (item: ChildType) => any
 ): GroupItem<T, ChildType>[];
+
 distinct(getProp?: GetPropValueType<T>): Array<T>;
+
 mapIf<T2>(map: (item: T) => T2, condition: (item: T) => boolean): Array<T2>;
+
 filterByCollection<T2>(getProp: (item: T) => T2, collection: T2[]): T[];
+
 filterByExcludesCollection<T2>(getProp: (item: T) => T2, collection: T2[]): T[];
+
 findByCollection<T2>(getProp: (item: T) => T2, collection: T2[]): T;
 
 ```
