@@ -11,6 +11,8 @@
   - [Unique List](#unique-list)
   - [Chain Functions](#chain-functions)
   - [Function Decoratos](#function-decoratos)
+  - [Conditional Helpers](#conditional-helpers)
+  - [Extend Array](#extend-array)
 
 ## Utilities For Web Projects
 
@@ -252,6 +254,41 @@ testMethod(){
 testMethod(){
   return {id:1}
 }
+```
+
+### [Conditional Helpers](#conditionalHelpers)
+
+Helpers for simple switch , if-else
+
+```Typescript
+//SWITCH
+const conditional = createSwitch({ "1": 1, "2": 2, "3": 3 });
+const result = conditional("3") // 3;
+
+//with default value
+const conditional = createSwitch<string, number | string>({ "1": 1 }, "");
+const result = conditional("3"); // ""
+
+//with function
+const conditional = createSwitch({ "1": (value: string) => +value, "2": (value: string) => +value * 2 });
+const result = conditional("2")?.("2"); // 4
+
+//IF-ELSE : only runs the first met condition
+const conditional = createConditional(
+  [(value: number) => value < 5, "small"],
+  [(value: number) => value > 5, "big"],
+  [(value: number) => true , "default"]
+);
+
+const result = conditional(6); // "big"
+
+//with function
+const conditional = createConditional(
+  [(value: boolean) => value, (value: number) => value * 2],
+  [(value: boolean) => !value, (value: number) => value / 2]
+);
+
+const result = conditional(false)?.(2); // 1
 ```
 
 ### [Extend Array](#extendArray)
